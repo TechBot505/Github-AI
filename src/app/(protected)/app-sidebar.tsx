@@ -1,11 +1,11 @@
 'use client';
-
 import { Button } from "@/components/ui/button";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
 import { cn } from "@/lib/utils";
 import { Bot, CreditCard, GithubIcon, LayoutDashboard, Plus, Presentation } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import useProject from "@/hooks/use-project";
 
 const items = [
     {
@@ -30,21 +30,10 @@ const items = [
     }
 ]
 
-const projects = [
-    {
-        name: 'Doom AI'
-    },
-    {
-        name: 'Inspire AI'
-    },
-    {
-        name: 'Github AI'
-    }
-]
-
 const AppSidebar = () => {
     const pathname = usePathname();
     const { open } = useSidebar();
+    const { projects, projectId, setProjectId } = useProject();
     return (
         <Sidebar collapsible="icon" variant="floating">
             <SidebarHeader>
@@ -79,16 +68,17 @@ const AppSidebar = () => {
                     <SidebarGroupLabel>Your Projects</SidebarGroupLabel>
                     <SidebarGroupContent>
                         <SidebarMenu>
-                            {projects.map((project) => {
+                            {projects?.map((project) => {
                                 return (
                                     <SidebarMenuItem key={project.name}>
                                         <SidebarMenuButton asChild>
-                                            <div>
+                                            <div onClick={() => {
+                                                setProjectId(project.id);
+                                            }} className="cursor-pointer">
                                                 <div className={cn(
-                                                    'rounded-sm size-6 border flex items-center justify-center text-sm bg-white text-primary cursor-pointer',
+                                                    'rounded-sm size-6 border flex items-center justify-center text-sm bg-white text-primary',
                                                     {
-                                                        // 'bg-primary text-white': project.id === project.id
-                                                        'bg-primary text-white': true
+                                                        'bg-primary text-white': project.id === projectId
 
                                                     }
                                                 )}>
@@ -101,14 +91,16 @@ const AppSidebar = () => {
                                 )
                             })}
                             <div className="h-2"></div>
-                            {open && <SidebarMenuItem>
-                                <Link href='/create'>
-                                    <Button size={'sm'} variant={'outline'} className="w-fit">
-                                        <Plus />
-                                        <span>Create Project</span>
-                                    </Button>
-                                </Link>
-                            </SidebarMenuItem> }
+                            {open && (
+                                <SidebarMenuItem>
+                                    <Link href='/create'>
+                                        <Button size={'sm'} variant={'outline'} className="w-fit">
+                                            <Plus />
+                                            <span>Create Project</span>
+                                        </Button>
+                                    </Link>
+                                </SidebarMenuItem>
+                            ) }
                         </SidebarMenu>
                     </SidebarGroupContent>
                 </SidebarGroup>
