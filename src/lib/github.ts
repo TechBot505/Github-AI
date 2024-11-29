@@ -24,7 +24,7 @@ export const getCommitHashes = async (githubUrl: string): Promise<Response[]> =>
         owner,
         repo
     })
-    const sortedCommits = data.sort((a: any, b: any) => new Date(b.commit.author.date).getTime() - new Date(a.commit.author.date).getTime());
+    const sortedCommits = data.sort((a: any, b: any) => new Date(b.commit.author.date).getTime() - new Date(a.commit.author.date).getTime()) as any[];
     return sortedCommits.slice(0, 10).map((commit: any) => ({
         hash: commit.sha as string,
         message: commit.commit.message ?? "",
@@ -38,7 +38,7 @@ export const pollCommits = async (projectId: string) => {
     const { project, githubUrl } = await fetchProjectGithubUrl(projectId);
     const commitHashes = await getCommitHashes(githubUrl);
     const unprocessedCommits = await fileterUnprocessedCommits(projectId, commitHashes);
-    const summaryResponses = await Promise.allSettled(unprocessedCommits.map(async (commit) => {
+    const summaryResponses = await Promise.allSettled(unprocessedCommits.map((commit) => {
         return summariseCommit(githubUrl, commit.hash);
     }));
     const summaries = summaryResponses.map((response) => {
