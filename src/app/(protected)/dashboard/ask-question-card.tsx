@@ -4,7 +4,7 @@ import useProject from "@/hooks/use-project";
 import { Textarea } from "@/components/ui/textarea";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogTitle } from "@radix-ui/react-dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { DialogHeader } from "@/components/ui/dialog";
 import { GithubIcon } from "lucide-react";
 
@@ -12,7 +12,7 @@ const AskQuestionCard = () => {
     const { project } = useProject();
     const [question, setQuestion] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false);
-    
+
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         setOpen(true);
