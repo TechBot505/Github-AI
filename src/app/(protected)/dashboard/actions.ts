@@ -61,7 +61,7 @@ export async function askQuestion(question: string, projectId: string) {
     })();
 
     return {
-        output: stream,
+        output: stream.value,
         filesReferenced: result
     }
 }
