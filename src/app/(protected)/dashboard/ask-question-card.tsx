@@ -10,24 +10,28 @@ import { GithubIcon } from "lucide-react";
 import { askQuestion } from "./actions";
 import { readStreamableValue } from "ai/rsc";
 import MDEditor from "@uiw/react-md-editor";
+import CodeReferences from "./file-references";
+import { api } from "@/trpc/react";
+import { toast } from "sonner";
 
 const AskQuestionCard = () => {
     const { project } = useProject();
     const [question, setQuestion] = useState<string>('');
     const [open, setOpen] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
-    const [filesReferenced, setFilesReferenced] = useState<{ fileName: string, sourceCode: string, summary: string }[]>([]);
+    const [filesReferences, setFilesReferences] = useState<{ fileName: string, sourceCode: string, summary: string }[]>([]);
     const [answer, setAnswer] = useState<string>('');
+    const saveAnswer = api.project.saveAnswer.useMutation();
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         setAnswer('');
-        setFilesReferenced([]);
+        setFilesReferences([]);
         e.preventDefault();
         if(!project?.id) return;
         setLoading(true);
-        const { output, filesReferenced } = await askQuestion(question, project.id);
+        const { output, filesReferences } = await askQuestion(question, project.id);
         setOpen(true);
-        setFilesReferenced(filesReferenced);
+        setFilesReferences(filesReferences);
         for await (const delta of readStreamableValue(output)) {
             if(delta) {
                 setAnswer(ans => ans + delta);
@@ -40,11 +44,29 @@ const AskQuestionCard = () => {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="sm:max-w-[80vw]">
                     <DialogHeader>
-                        <DialogTitle>
-                        <GithubIcon className="bg-black text-white rounded-full p-1" size={30}/>
-                        </DialogTitle>
+                        <div className="flex gap-2 items-center">
+                            <DialogTitle>
+                                <GithubIcon className="bg-black text-white rounded-full p-1" size={30}/>
+                            </DialogTitle>
+                            <Button disabled={saveAnswer.isPending} variant={'outline'} onClick={() => {
+                                saveAnswer.mutate({
+                                    projectId: project!.id,
+                                    question,
+                                    answer,
+                                    filesReferences
+                                }, {
+                                    onSuccess: () => {
+                                        toast.success('Answer saved successfully');
+                                    }
+                                })
+                            }}>
+                                Save Answer
+                            </Button>
+                        </div>
                     </DialogHeader>
-                    <MDEditor.Markdown source={answer} className="max-w-[70vw] h-full max-h-[40vh] overflow-scroll"/>
+                    <MDEditor.Markdown source={answer} className="max-w-[70vw] !h-full max-h-[40vh] overflow-scroll"/>
+                    <div className="h-4"></div>
+                    <CodeReferences fileReferences={filesReferences}/>
                     <Button type="button" onClick={() => {setOpen(false)}}>
                         Close
                     </Button>
