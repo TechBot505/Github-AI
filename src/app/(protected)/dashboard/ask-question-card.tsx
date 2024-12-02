@@ -9,6 +9,7 @@ import { DialogHeader } from "@/components/ui/dialog";
 import { GithubIcon } from "lucide-react";
 import { askQuestion } from "./actions";
 import { readStreamableValue } from "ai/rsc";
+import MDEditor from "@uiw/react-md-editor";
 
 const AskQuestionCard = () => {
     const { project } = useProject();
@@ -19,12 +20,13 @@ const AskQuestionCard = () => {
     const [answer, setAnswer] = useState<string>('');
 
     const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+        setAnswer('');
+        setFilesReferenced([]);
         e.preventDefault();
         if(!project?.id) return;
         setLoading(true);
-        setOpen(true);
-
         const { output, filesReferenced } = await askQuestion(question, project.id);
+        setOpen(true);
         setFilesReferenced(filesReferenced);
         for await (const delta of readStreamableValue(output)) {
             if(delta) {
@@ -36,17 +38,16 @@ const AskQuestionCard = () => {
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
-                <DialogContent>
+                <DialogContent className="sm:max-w-[80vw]">
                     <DialogHeader>
                         <DialogTitle>
                         <GithubIcon className="bg-black text-white rounded-full p-1" size={30}/>
                         </DialogTitle>
                     </DialogHeader>
-                    {answer}
-                    <h1>File References</h1>
-                    {filesReferenced.map(file => {
-                        return <span key={file.fileName}>{file.fileName}</span>
-                    })}
+                    <MDEditor.Markdown source={answer} className="max-w-[70vw] h-full max-h-[40vh] overflow-scroll"/>
+                    <Button type="button" onClick={() => {setOpen(false)}}>
+                        Close
+                    </Button>
                 </DialogContent>
             </Dialog>
 
@@ -62,7 +63,7 @@ const AskQuestionCard = () => {
                             onChange={(e) => setQuestion(e.target.value)}
                         />
                         <div className="h-4"></div>
-                        <Button type="submit">
+                        <Button type="submit" disabled={loading}>
                             Ask Github AI
                         </Button>
                     </form>
