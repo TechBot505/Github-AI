@@ -48,9 +48,9 @@ const AskQuestionCard = () => {
             <Dialog open={open} onOpenChange={setOpen}>
                 <DialogContent className="sm:max-w-[80vw]">
                     <DialogHeader>
-                        <div className="flex gap-2 items-center">
+                        <div className="flex gap-4 items-center">
                             <DialogTitle>
-                                <GithubIcon className="bg-black text-white rounded-full p-1" size={30}/>
+                                <GithubIcon className="bg-black text-white rounded-full p-1" size={32}/>
                             </DialogTitle>
                             <Button disabled={saveAnswer.isPending} variant={'outline'} onClick={() => {
                                 saveAnswer.mutate({
@@ -69,10 +69,12 @@ const AskQuestionCard = () => {
                             </Button>
                         </div>
                     </DialogHeader>
-                    <MDEditor.Markdown source={answer} className="max-w-[70vw] !h-full max-h-[40vh] overflow-scroll"/>
+                    <div className="flex flex-col items-center">
+                    <MDEditor.Markdown source={answer} className="max-w-[70vw] max-h-[35vh] overflow-scroll"/>
                     <div className="h-4"></div>
                     <CodeReferences fileReferences={filesReferences}/>
-                    <Button type="button" onClick={() => {setOpen(false)}}>
+                    </div>
+                    <Button className="w-[70vw] mx-auto" type="button" onClick={() => {setOpen(false)}}>
                         Close
                     </Button>
                 </DialogContent>

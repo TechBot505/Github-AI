@@ -28,7 +28,7 @@ const CodeReferences = ({fileReferences} : Props) => {
                     ))}
                 </div>
                 {fileReferences.map(file => (
-                    <TabsContent key={file.fileName} value={file.fileName} className="max-h-[40vh] overflow-scroll max-w-7xl rounded-md">
+                    <TabsContent key={file.fileName} value={file.fileName} className="max-h-[30vh] overflow-scroll max-w-7xl rounded-md">
                         <SyntaxHighlighter language="typescript" style={lucario} showLineNumbers>
                             {file.sourceCode}
                         </SyntaxHighlighter>
