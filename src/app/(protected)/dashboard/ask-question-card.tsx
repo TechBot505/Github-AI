@@ -70,9 +70,9 @@ const AskQuestionCard = () => {
                         </div>
                     </DialogHeader>
                     <div className="flex flex-col items-center">
-                    <MDEditor.Markdown source={answer} className="max-w-[70vw] max-h-[35vh] overflow-scroll"/>
-                    <div className="h-4"></div>
-                    <CodeReferences fileReferences={filesReferences}/>
+                        <MDEditor.Markdown source={answer} className="max-w-[70vw] max-h-[35vh] overflow-scroll"/>
+                        <div className="h-4"></div>
+                        <CodeReferences fileReferences={filesReferences}/>
                     </div>
                     <Button className="w-[70vw] mx-auto" type="button" onClick={() => {setOpen(false)}}>
                         Close

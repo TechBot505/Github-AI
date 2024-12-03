@@ -76,7 +76,7 @@ const AppSidebar = () => {
                                                 setProjectId(project.id);
                                             }} className="cursor-pointer">
                                                 <div className={cn(
-                                                    'rounded-sm size-6 border flex items-center justify-center text-sm bg-white text-primary',
+                                                    'rounded-sm size-7 border px-3 -ml-1.5 flex items-center justify-center text-sm bg-white text-primary',
                                                     {
                                                         'bg-primary text-white': project.id === projectId
 
