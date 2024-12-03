@@ -13,6 +13,7 @@ import MDEditor from "@uiw/react-md-editor";
 import CodeReferences from "./file-references";
 import { api } from "@/trpc/react";
 import { toast } from "sonner";
+import useRefetch from "@/hooks/use-refetch";
 
 const AskQuestionCard = () => {
     const { project } = useProject();
@@ -39,6 +40,9 @@ const AskQuestionCard = () => {
         }
         setLoading(false);
     }
+
+    const refetch = useRefetch();
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>
@@ -57,6 +61,7 @@ const AskQuestionCard = () => {
                                 }, {
                                     onSuccess: () => {
                                         toast.success('Answer saved successfully');
+                                        refetch();
                                     }
                                 })
                             }}>
