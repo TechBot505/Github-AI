@@ -5,6 +5,7 @@ import { uploadFile } from '@/lib/firebase';
 import { Presentation, Upload } from 'lucide-react';
 import React, { useState } from 'react';
 import { useDropzone } from 'react-dropzone';
+import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 
 const MeetingCard = () => {
     const [uploading, setUploading] = useState(false);
@@ -44,7 +45,10 @@ const MeetingCard = () => {
                 </>
             )}
             {uploading && (
-                
+                <div>
+                    <CircularProgressbar value={progress} text={`${progress}%`} className='size-20'/>
+                    <p className='text-sm text-greay-500 text-center'>Uploading your meeting...</p>
+                </div>
             )}
         </Card>
     )
