@@ -2,7 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getDownloadURL, getStorage, ref, uploadBytesResumable } from "firebase/storage";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA52cd_kxWjJdWr6qitJVJeOPEUUFB-gWA",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "github-ai-ababd.firebaseapp.com",
   projectId: "github-ai-ababd",
   storageBucket: "github-ai-ababd.firebasestorage.app",
